@@ -116,6 +116,11 @@ class _ShopChart extends StatelessWidget {
               BarChart(
                 BarChartData(
                   alignment: BarChartAlignment.spaceAround,
+                  // Lock Y axis 0-14000 like Vue's ECharts default for this
+                  // data set. Otherwise fl_chart auto-scales and labels read
+                  // differently (6.2K vs 14,000).
+                  maxY: 14000,
+                  minY: 0,
                   gridData: const FlGridData(
                     show: true,
                     drawVerticalLine: false,
@@ -227,7 +232,8 @@ class _ShopChart extends StatelessWidget {
                   ),
                 ),
               ),
-              // Line overlay = total
+              // Line overlay = total — share the same Y range so the line
+              // tracks the bar tops correctly.
               LineChart(
                 LineChartData(
                   gridData: const FlGridData(show: false),
@@ -235,6 +241,8 @@ class _ShopChart extends StatelessWidget {
                   borderData: FlBorderData(show: false),
                   minX: -0.5,
                   maxX: (n - 1).toDouble() + 0.5,
+                  minY: 0,
+                  maxY: 14000,
                   lineBarsData: [
                     LineChartBarData(
                       isCurved: false,
