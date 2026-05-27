@@ -3,12 +3,15 @@ import 'package:flutter/material.dart';
 class AppColors {
   const AppColors._();
 
-  static const Color primary = Color(0xFF1890FF);
-  static const Color primaryDark = Color(0xFF096DD9);
-  static const Color success = Color(0xFF52C41A);
-  static const Color warning = Color(0xFFFAAD14);
-  static const Color danger = Color(0xFFF5222D);
-  static const Color info = Color(0xFF13C2C2);
+  // iview Primary button = #2D8CF0
+  static const Color primary = Color(0xFF2D8CF0);
+  static const Color primaryDark = Color(0xFF2272D9);
+  // iview defaults — match Vue's button colors:
+  //   success #19BE6B, warning #FF9900, error #ED3F14, info #2DB7F5
+  static const Color success = Color(0xFF19BE6B);
+  static const Color warning = Color(0xFFFF9900);
+  static const Color danger = Color(0xFFED3F14);
+  static const Color info = Color(0xFF2DB7F5);
 
   // Background of the page content — matches Vue's `body` (#e4e5e6).
   static const Color bgPage = Color(0xFFE4E5E6);
