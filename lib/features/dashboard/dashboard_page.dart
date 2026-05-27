@@ -463,52 +463,104 @@ class _UserProgressCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Vue's dashboard hardcodes 2 demo users — keep them so the layout matches.
     return Card(
       child: Padding(
         padding: const EdgeInsets.all(AppSpacing.md),
         child: Column(
-          children: [
-            Row(
-              children: [
-                CircleAvatar(
-                  radius: 18,
-                  backgroundColor: AppColors.primary,
-                  child: Text(
-                    name.isNotEmpty ? name[0] : '?',
-                    style: const TextStyle(color: Colors.white, fontSize: 14),
-                  ),
-                ),
-                const SizedBox(width: AppSpacing.sm),
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(name,
-                          style: const TextStyle(fontWeight: FontWeight.w600)),
-                      const Text(
-                        '- Marketing',
-                        style: TextStyle(
-                          color: AppColors.textSecondary,
-                          fontSize: 12,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                const Text('60%',
-                    style: TextStyle(color: AppColors.textRegular)),
-              ],
+          children: const [
+            _UserProgressRow(
+              initial: 'H',
+              avatarColor: Color(0xFFE74C3C),
+              name: 'Hoffman Doe',
+              role: '- Support',
+              value: 0.3,
+              progressColor: Color(0xFFE74C3C),
+              showPercent: false,
             ),
-            const SizedBox(height: AppSpacing.sm),
-            const LinearProgressIndicator(
+            SizedBox(height: AppSpacing.md),
+            _UserProgressRow(
+              initial: 'J',
+              avatarColor: Color(0xFF5EAFF0),
+              name: 'Jane Doe',
+              role: '- Marketing',
               value: 0.6,
-              backgroundColor: AppColors.borderLight,
-              valueColor: AlwaysStoppedAnimation(Color(0xFF5EAFF0)),
-              minHeight: 6,
+              progressColor: Color(0xFF5EAFF0),
+              showPercent: true,
+              percent: '60%',
             ),
           ],
         ),
       ),
+    );
+  }
+}
+
+class _UserProgressRow extends StatelessWidget {
+  const _UserProgressRow({
+    required this.initial,
+    required this.avatarColor,
+    required this.name,
+    required this.role,
+    required this.value,
+    required this.progressColor,
+    required this.showPercent,
+    this.percent,
+  });
+
+  final String initial;
+  final Color avatarColor;
+  final String name;
+  final String role;
+  final double value;
+  final Color progressColor;
+  final bool showPercent;
+  final String? percent;
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          children: [
+            CircleAvatar(
+              radius: 18,
+              backgroundColor: avatarColor,
+              child: Text(
+                initial,
+                style: const TextStyle(color: Colors.white, fontSize: 14),
+              ),
+            ),
+            const SizedBox(width: AppSpacing.sm),
+            Expanded(
+              child: Row(
+                children: [
+                  Text(name,
+                      style: const TextStyle(fontWeight: FontWeight.w600)),
+                  const SizedBox(width: 4),
+                  Text(
+                    role,
+                    style: const TextStyle(
+                      color: AppColors.textSecondary,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (showPercent && percent != null)
+              Text(percent!,
+                  style: const TextStyle(color: AppColors.textRegular)),
+          ],
+        ),
+        const SizedBox(height: AppSpacing.sm),
+        LinearProgressIndicator(
+          value: value,
+          backgroundColor: AppColors.borderLight,
+          valueColor: AlwaysStoppedAnimation(progressColor),
+          minHeight: 6,
+        ),
+      ],
     );
   }
 }
