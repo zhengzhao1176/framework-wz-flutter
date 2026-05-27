@@ -175,45 +175,60 @@ class _LeafTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Explicit Semantics with `link`+`button` flags so Selenium / a11y tools
+    // can locate each sidebar item by its title. Keys also let widget tests
+    // tap items reliably.
     return Semantics(
+      key: Key('sidebar.${node.key}'),
       label: node.title,
+      button: true,
+      link: true,
+      enabled: true,
       selected: active,
-      child: InkWell(
-        onTap: onTap,
-        hoverColor: AppColors.bgSidebarHover,
-        child: Container(
-          height: 50,
-          padding: EdgeInsets.only(
-            left: AppSpacing.md + indent,
-            right: AppSpacing.md,
-          ),
-          decoration: BoxDecoration(
-            color: active ? const Color(0xFF409EFF) : null,
-          ),
-          child: Row(
-            children: [
-              Icon(
-                node.icon ?? Icons.fiber_manual_record,
-                size: node.icon == null ? 8 : 18,
-                color: active ? AppColors.sidebarTextActive : AppColors.sidebarText,
+      onTapHint: '导航到 ${node.title}',
+      child: ExcludeSemantics(
+        excluding: false,
+        child: MergeSemantics(
+          child: InkWell(
+            onTap: onTap,
+            hoverColor: AppColors.bgSidebarHover,
+            child: Container(
+              height: 50,
+              padding: EdgeInsets.only(
+                left: AppSpacing.md + indent,
+                right: AppSpacing.md,
               ),
-              if (!collapsed) ...[
-                const SizedBox(width: AppSpacing.sm + 2),
-                Expanded(
-                  child: Text(
-                    node.title,
-                    overflow: TextOverflow.ellipsis,
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: active
-                          ? AppColors.sidebarTextActive
-                          : AppColors.sidebarText,
-                      fontWeight: active ? FontWeight.w500 : FontWeight.w400,
-                    ),
+              decoration: BoxDecoration(
+                color: active ? const Color(0xFF409EFF) : null,
+              ),
+              child: Row(
+                children: [
+                  Icon(
+                    node.icon ?? Icons.fiber_manual_record,
+                    size: node.icon == null ? 8 : 18,
+                    color: active
+                        ? AppColors.sidebarTextActive
+                        : AppColors.sidebarText,
                   ),
-                ),
-              ],
-            ],
+                  if (!collapsed) ...[
+                    const SizedBox(width: AppSpacing.sm + 2),
+                    Expanded(
+                      child: Text(
+                        node.title,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                          fontSize: 14,
+                          color: active
+                              ? AppColors.sidebarTextActive
+                              : AppColors.sidebarText,
+                          fontWeight: active ? FontWeight.w500 : FontWeight.w400,
+                        ),
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
           ),
         ),
       ),
@@ -239,43 +254,48 @@ class _GroupTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Semantics(
+      key: Key('sidebar.${node.key}'),
       label: node.title,
       button: true,
+      enabled: true,
       expanded: expanded,
-      child: InkWell(
-        onTap: onTap,
-        hoverColor: AppColors.bgSidebarHover,
-        child: Container(
-          height: 50,
-          padding: EdgeInsets.only(
-            left: AppSpacing.md + indent,
-            right: AppSpacing.md,
-          ),
-          child: Row(
-            children: [
-              Icon(
-                node.icon ?? Icons.folder_outlined,
-                size: 18,
-                color: AppColors.sidebarText,
-              ),
-              if (!collapsed) ...[
-                const SizedBox(width: AppSpacing.sm + 2),
-                Expanded(
-                  child: Text(
-                    node.title,
-                    style: const TextStyle(
-                      color: AppColors.sidebarText,
-                      fontSize: 14,
-                    ),
-                  ),
-                ),
+      onTapHint: expanded ? '折叠 ${node.title}' : '展开 ${node.title}',
+      child: MergeSemantics(
+        child: InkWell(
+          onTap: onTap,
+          hoverColor: AppColors.bgSidebarHover,
+          child: Container(
+            height: 50,
+            padding: EdgeInsets.only(
+              left: AppSpacing.md + indent,
+              right: AppSpacing.md,
+            ),
+            child: Row(
+              children: [
                 Icon(
-                  expanded ? Icons.expand_more : Icons.chevron_left,
-                  size: 16,
+                  node.icon ?? Icons.folder_outlined,
+                  size: 18,
                   color: AppColors.sidebarText,
                 ),
+                if (!collapsed) ...[
+                  const SizedBox(width: AppSpacing.sm + 2),
+                  Expanded(
+                    child: Text(
+                      node.title,
+                      style: const TextStyle(
+                        color: AppColors.sidebarText,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                  Icon(
+                    expanded ? Icons.expand_more : Icons.chevron_left,
+                    size: 16,
+                    color: AppColors.sidebarText,
+                  ),
+                ],
               ],
-            ],
+            ),
           ),
         ),
       ),
