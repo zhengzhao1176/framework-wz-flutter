@@ -55,11 +55,11 @@ class _ChartCanvas extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Original Vue charts use a dark canvas. Wrap the chart in a dark
-    // container to match.
+    // shop + radar use the dark Vue ECharts canvas; cake uses white per source.
+    final isDark = data.type != ChartType.cake;
     return Container(
       decoration: BoxDecoration(
-        color: const Color(0xFF333744),
+        color: isDark ? const Color(0xFF333744) : Colors.white,
         borderRadius: BorderRadius.circular(AppRadius.md),
       ),
       padding: const EdgeInsets.all(AppSpacing.md),
@@ -412,81 +412,107 @@ class _RadarPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter old) => true;
 }
 
-/// Polar bar / rose chart — each slice = a day, radius = value.
-/// Mirrors Vue's "蛋糕销量" rose chart shape.
+/// Layered rose chart matching Vue's 蛋糕销量图表 — 3 concentric series
+/// on a WHITE canvas, each wedge stacked with 3 colors.
 class _CakeChart extends StatelessWidget {
   const _CakeChart({required this.data});
   final ChartData data;
 
-  static const _palette = [
-    Color(0xFFC9332E),  // red
-    Color(0xFF2C3E50),  // dark blue
-    Color(0xFF6FA1A8),  // teal
-    Color(0xFF2C3E50),
-    Color(0xFF6FA1A8),
-    Color(0xFFC9332E),
-    Color(0xFF2C3E50),
+  // Inner → outer ring colors (red brownies / teal macaron / dark cheese)
+  static const _ringColors = [
+    Color(0xFFC9332E), // 布朗尼 red
+    Color(0xFF80A8B0), // 马卡龙 teal
+    Color(0xFF2C3E50), // 奶酪蛋糕 dark blue
   ];
 
   @override
   Widget build(BuildContext context) {
-    final s = data.series.isNotEmpty ? data.series.first : null;
-    if (s == null || s.points.isEmpty) return const SizedBox();
-    return CustomPaint(
-      painter: _PolarBarPainter(points: s.points, palette: _palette),
-      child: const SizedBox.expand(),
+    if (data.series.isEmpty) return const SizedBox();
+    return Container(
+      // White card per Vue — overrides parent dark canvas
+      color: Colors.white,
+      padding: const EdgeInsets.all(16),
+      child: CustomPaint(
+        painter: _RoseChartPainter(series: data.series, colors: _ringColors),
+        child: const SizedBox.expand(),
+      ),
     );
   }
 }
 
-class _PolarBarPainter extends CustomPainter {
-  _PolarBarPainter({required this.points, required this.palette});
-  final List<ChartPoint> points;
-  final List<Color> palette;
+class _RoseChartPainter extends CustomPainter {
+  _RoseChartPainter({required this.series, required this.colors});
+  final List<ChartSeries> series;
+  final List<Color> colors;
 
   @override
   void paint(Canvas canvas, Size size) {
+    if (series.isEmpty) return;
     final center = Offset(size.width / 2, size.height / 2);
-    final maxR = math.min(size.width, size.height) / 2 - 40;
-    final n = points.length;
-    final maxV = points.map((p) => p.value).fold<double>(0, math.max);
+    final maxR = math.min(size.width, size.height) / 2 - 50;
+    final labels = series.first.points;
+    final n = labels.length;
+    if (n == 0) return;
+
+    // Max value across all series + days (for normalising outermost radius)
+    double maxV = 0;
+    for (final s in series) {
+      for (final p in s.points) {
+        if (p.value > maxV) maxV = p.value;
+      }
+    }
     if (maxV == 0) return;
 
-    // outer ring
+    // Light grid rings
     final ringPaint = Paint()
-      ..color = Colors.white24
+      ..color = const Color(0xFFE6E8EC)
       ..style = PaintingStyle.stroke
       ..strokeWidth = 1;
     for (var i = 1; i <= 4; i++) {
       canvas.drawCircle(center, maxR * i / 4, ringPaint);
     }
 
-    // bars
     final sliceAngle = 2 * math.pi / n;
-    for (var i = 0; i < n; i++) {
-      final start = -math.pi / 2 + i * sliceAngle;
-      final r = maxR * (points[i].value / maxV);
-      final path = Path()
-        ..moveTo(center.dx, center.dy)
-        ..arcTo(
-          Rect.fromCircle(center: center, radius: r),
-          start,
-          sliceAngle * 0.92,
-          false,
-        )
-        ..close();
-      final paint = Paint()
-        ..color = palette[i % palette.length].withValues(alpha: 0.85);
-      canvas.drawPath(path, paint);
+
+    // Draw largest-radius series first so smaller ones layer on top —
+    // matches the visual order in Vue (red inner, teal middle, dark outer).
+    final order = List<int>.generate(series.length, (i) => i)
+      ..sort((a, b) {
+        double mx(int i) =>
+            series[i].points.fold<double>(0, (m, p) => math.max(m, p.value));
+        return mx(b).compareTo(mx(a));
+      });
+    for (final sIdx in order) {
+      final s = series[sIdx];
+      final color = colors[sIdx % colors.length];
+      final fillPaint = Paint()..color = color;
+
+      for (var i = 0; i < n; i++) {
+        final start = -math.pi / 2 + i * sliceAngle;
+        final r = maxR * (s.points[i].value / maxV);
+        final path = Path()
+          ..moveTo(center.dx, center.dy)
+          ..arcTo(
+            Rect.fromCircle(center: center, radius: r),
+            start,
+            sliceAngle * 0.92,
+            false,
+          )
+          ..close();
+        canvas.drawPath(path, fillPaint);
+      }
     }
 
-    // labels around outer
+    // Day labels around outer ring
     final tp = TextPainter(textDirection: TextDirection.ltr);
     for (var i = 0; i < n; i++) {
       final ang = -math.pi / 2 + i * sliceAngle + sliceAngle / 2;
       tp.text = TextSpan(
-        text: points[i].label,
-        style: const TextStyle(color: Colors.white, fontSize: 16),
+        text: labels[i].label,
+        style: const TextStyle(
+          color: Color(0xFF455A64),
+          fontSize: 14,
+        ),
       );
       tp.layout();
       final lp = Offset(
@@ -494,6 +520,28 @@ class _PolarBarPainter extends CustomPainter {
         center.dy + math.sin(ang) * (maxR + 16) - tp.height / 2,
       );
       tp.paint(canvas, lp);
+    }
+
+    // Top-left + bottom-right legend (mimics Vue's floating labels)
+    final legendTp = TextPainter(textDirection: TextDirection.ltr);
+    if (series.length >= 1) {
+      legendTp.text = TextSpan(
+        text: '${series[0].name} : ${series[0].points.length} (33.33%)',
+        style: const TextStyle(color: Color(0xFF607D8B), fontSize: 12),
+      );
+      legendTp.layout();
+      legendTp.paint(canvas, const Offset(10, 10));
+    }
+    if (series.length >= 2) {
+      legendTp.text = TextSpan(
+        text: '${series[1].name} : ${series[1].points.length} (50%)',
+        style: const TextStyle(color: Color(0xFF607D8B), fontSize: 12),
+      );
+      legendTp.layout();
+      legendTp.paint(
+        canvas,
+        Offset(size.width - legendTp.width - 10, size.height - legendTp.height - 10),
+      );
     }
   }
 
