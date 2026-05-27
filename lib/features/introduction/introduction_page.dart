@@ -70,7 +70,7 @@ class IntroductionPage extends StatelessWidget {
               crossAxisCount: cols,
               mainAxisSpacing: AppSpacing.md,
               crossAxisSpacing: AppSpacing.md,
-              childAspectRatio: 1.6,
+              childAspectRatio: 1.3,
               children: const [
                 _PracticeCard(
                   title: 'Yi+ 内容审核平台',

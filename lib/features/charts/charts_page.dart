@@ -123,11 +123,31 @@ class _ShopChart extends StatelessWidget {
                   ),
                   borderData: FlBorderData(show: false),
                   titlesData: FlTitlesData(
-                    leftTitles: const AxisTitles(
+                    leftTitles: AxisTitles(
                       sideTitles: SideTitles(
                         showTitles: true,
                         reservedSize: 48,
                         interval: 2000,
+                        // Format with comma thousand-separator to match Vue.
+                        getTitlesWidget: (v, _) {
+                          final n = v.toInt();
+                          // 10,000 style
+                          final s = n.toString().replaceAllMapped(
+                            RegExp(r'(\d)(?=(\d{3})+$)'),
+                            (m) => '${m[1]},',
+                          );
+                          return Padding(
+                            padding: const EdgeInsets.only(right: 4),
+                            child: Text(
+                              s,
+                              textAlign: TextAlign.right,
+                              style: const TextStyle(
+                                color: Colors.white70,
+                                fontSize: 10,
+                              ),
+                            ),
+                          );
+                        },
                       ),
                     ),
                     rightTitles: const AxisTitles(
