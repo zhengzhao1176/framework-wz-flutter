@@ -741,70 +741,101 @@ class _HoverButtonState extends State<_HoverButton> {
       _ => Colors.white,
     };
 
-    return MouseRegion(
-      onEnter: (_) => setState(() => _hover = true),
-      onExit: (_) => setState(() => _hover = false),
-      child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        width: 180,
-        height: 52,
-        decoration: BoxDecoration(
-          color: _hover ? hoverBg : Colors.transparent,
-          border: Border.all(color: Colors.white, width: 2),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            if (widget.icon != null) ...[
-              Icon(widget.icon, color: txtColor, size: 18),
-              const SizedBox(width: 6),
-            ],
-            Text(
-              widget.text,
-              style: TextStyle(
-                color: txtColor,
-                fontSize: 14,
-                fontWeight: FontWeight.w500,
-                letterSpacing: 0.5,
+    // .wz-hover { padding:25px 80px; border:3px solid #fff; margin:15px 30px; }
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
+      child: MouseRegion(
+        onEnter: (_) => setState(() => _hover = true),
+        onExit: (_) => setState(() => _hover = false),
+        child: AnimatedContainer(
+          duration: const Duration(milliseconds: 300),
+          // padding 25 80 → about 230×80 inner
+          padding: const EdgeInsets.symmetric(horizontal: 80, vertical: 25),
+          decoration: BoxDecoration(
+            color: _hover ? hoverBg : Colors.transparent,
+            border: Border.all(color: Colors.white, width: 3),
+          ),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              if (widget.icon != null) ...[
+                Icon(widget.icon, color: txtColor, size: 18),
+                const SizedBox(width: 6),
+              ],
+              Text(
+                widget.text,
+                style: TextStyle(
+                  color: txtColor,
+                  fontSize: 14,
+                  fontWeight: FontWeight.w500,
+                  letterSpacing: 0.5,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
   }
 }
 
+/// Cool-hover button — matches `.wz-coolhover-*` 1px-border 250×80 chips
+/// from the original wzbutton.css. Each label has its own color.
 class _CoolHoverBtn extends StatefulWidget {
   const _CoolHoverBtn(this.text);
   final String text;
+
+  // Colors lifted directly from static/css/wzbutton.css.
+  static const _colors = {
+    'Settings': Color(0xFF9A3789),           // .swipe
+    'Diagonal Swipe': Color(0xFFBC4B41),     // .swipe-in (out shares similar)
+    'Double Swipe': Color(0xFFBC4B41),       // .swipe-in
+    'Diagonal Close': Color(0xFF48A6B1),     // .close
+    'Zoning In': Color(0xFFAD96A0),          // .zoningin
+    '4 Corners': Color(0xFF8D53B3),          // .corners
+    'Slice': Color(0xFF808695),              // .slice
+    'Alternate': Color(0xFF27692B),          // .alternate
+    'Smoosh': Color(0xFF5177A7),             // .smoosh
+    'Vertical Overlap': Color(0xFFC93A8E),   // .overlap-vertical
+    'Horizontal Overlap': Color(0xFF8F5C82), // .overlap-horizontal
+    'Collision': Color(0xFF5C7A8E),          // .collision-ish
+  };
+
   @override
   State<_CoolHoverBtn> createState() => _CoolHoverBtnState();
 }
 
 class _CoolHoverBtnState extends State<_CoolHoverBtn> {
   bool _hover = false;
+
   @override
   Widget build(BuildContext context) {
+    final c = _CoolHoverBtn._colors[widget.text] ?? const Color(0xFF9A3789);
     return MouseRegion(
       onEnter: (_) => setState(() => _hover = true),
       onExit: (_) => setState(() => _hover = false),
       child: AnimatedContainer(
-        duration: const Duration(milliseconds: 200),
-        width: 220,
-        height: 60,
+        duration: const Duration(milliseconds: 400),
+        // CSS: .wz-coolhover { width:100%; max-width:250px; height:80px;
+        //                      line-height:80px; margin:20px auto; }
+        width: 250,
+        height: 80,
+        margin: const EdgeInsets.symmetric(vertical: 10),
         decoration: BoxDecoration(
-          color: _hover ? AppColors.primary : Colors.transparent,
-          border: Border.all(color: AppColors.primary, width: 1),
+          color: _hover ? c : Colors.white,
+          // border:1px solid currentColor
+          border: Border.all(color: c, width: 1),
         ),
         alignment: Alignment.center,
         child: Text(
+          // text-transform: uppercase
           widget.text.toUpperCase(),
           style: TextStyle(
-            color: _hover ? Colors.white : AppColors.primary,
-            fontSize: 13,
+            color: _hover ? Colors.white : c,
+            fontSize: 14,
             fontWeight: FontWeight.w500,
-            letterSpacing: 1.2,
+            letterSpacing: 1.6,
           ),
         ),
       ),
