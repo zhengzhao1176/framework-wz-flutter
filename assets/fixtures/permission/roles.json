@@ -1,0 +1,5 @@
+{
+  "admin":  ["user.read", "user.write", "user.delete", "system.config"],
+  "editor": ["user.read", "content.write"],
+  "guest":  ["user.read"]
+}

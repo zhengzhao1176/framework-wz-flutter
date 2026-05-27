@@ -1,0 +1,60 @@
+name: framework_wz
+description: Flutter port of vue-framework-wz — an admin dashboard framework.
+publish_to: 'none'
+version: 0.1.0
+
+environment:
+  sdk: ">=3.6.0 <4.0.0"
+  flutter: ">=3.27.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  # State / DI
+  flutter_riverpod: ^2.5.1
+
+  # Routing
+  go_router: ^14.2.7
+
+  # Network
+  dio: ^5.5.0
+
+  # Storage
+  flutter_secure_storage: ^9.2.2
+  shared_preferences: ^2.3.2
+
+  # UI / Charts / Editors
+  fl_chart: ^0.68.0
+  flutter_markdown: ^0.7.3
+
+  # Utilities
+  csv: ^6.0.0
+  intl: ^0.20.2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+
+  flutter_lints: ^4.0.0
+  mocktail: ^1.0.4
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/fixtures/auth/
+    - assets/fixtures/menus/
+    - assets/fixtures/charts/
+    - assets/fixtures/table/
+    - assets/fixtures/json/
+    - assets/fixtures/permission/
+    - assets/images/logo.png
+    - assets/images/avatar.jpg
+  fonts:
+    - family: NotoSansSC
+      fonts:
+        - asset: assets/fonts/NotoSansSC-subset.ttf

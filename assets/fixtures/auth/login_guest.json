@@ -1,0 +1,5 @@
+{
+  "accessToken": "mock-guest-token",
+  "refreshToken": "mock-guest-refresh",
+  "expiresIn": 7200
+}

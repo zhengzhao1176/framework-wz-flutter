@@ -1,0 +1,15 @@
+{
+  "type": "bar",
+  "xLabels": ["Q1", "Q2", "Q3", "Q4"],
+  "series": [
+    {
+      "name": "销售额",
+      "points": [
+        {"label": "Q1", "value": 320},
+        {"label": "Q2", "value": 480},
+        {"label": "Q3", "value": 600},
+        {"label": "Q4", "value": 540}
+      ]
+    }
+  ]
+}

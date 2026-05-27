@@ -1,0 +1,5 @@
+{
+  "accessToken": "mock-admin-token",
+  "refreshToken": "mock-admin-refresh",
+  "expiresIn": 7200
+}

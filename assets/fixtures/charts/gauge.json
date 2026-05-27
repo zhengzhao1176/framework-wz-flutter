@@ -1,0 +1,11 @@
+{
+  "type": "gauge",
+  "series": [
+    {
+      "name": "完成度",
+      "points": [
+        {"label": "完成度", "value": 68}
+      ]
+    }
+  ]
+}

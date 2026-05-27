@@ -1,0 +1,12 @@
+{
+  "team": "Framework WZ",
+  "members": [
+    {"id": 1, "name": "Alice", "active": true, "roles": ["admin"]},
+    {"id": 2, "name": "Bob", "active": false, "roles": ["editor", "guest"]}
+  ],
+  "config": {
+    "theme": "light",
+    "features": {"charts": true, "richtext": false},
+    "meta": null
+  }
+}

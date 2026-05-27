@@ -1,0 +1,6 @@
+[
+  {"key":"dashboard","title":"Dashboard","path":"/dashboard","icon":"dashboard"},
+  {"key":"introduction","title":"介绍","path":"/introduction","icon":"intro"},
+  {"key":"jsontree","title":"JSON视图","path":"/jsontree","icon":"json"},
+  {"key":"markdown","title":"Markdown","path":"/markdown","icon":"editor"}
+]

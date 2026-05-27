@@ -1,0 +1,22 @@
+{
+  "type": "radar",
+  "xLabels": ["Sales", "Marketing", "Development", "Customer Support", "Information Techology", "Administration"],
+  "series": [
+    {"name":"预算分配 (Allocated Budget)","points":[
+      {"label":"Sales", "value":4300},
+      {"label":"Marketing", "value":10000},
+      {"label":"Development", "value":28000},
+      {"label":"Customer Support", "value":35000},
+      {"label":"Information Techology", "value":50000},
+      {"label":"Administration", "value":19000}
+    ]},
+    {"name":"实际开销 (Actual Spending)","points":[
+      {"label":"Sales", "value":5000},
+      {"label":"Marketing", "value":14000},
+      {"label":"Development", "value":28000},
+      {"label":"Customer Support", "value":31000},
+      {"label":"Information Techology", "value":42000},
+      {"label":"Administration", "value":21000}
+    ]}
+  ]
+}

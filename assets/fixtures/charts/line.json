@@ -1,0 +1,18 @@
+{
+  "type": "line",
+  "xLabels": ["周一", "周二", "周三", "周四", "周五", "周六", "周日"],
+  "series": [
+    {
+      "name": "访问量",
+      "points": [
+        {"label": "周一", "value": 120},
+        {"label": "周二", "value": 200},
+        {"label": "周三", "value": 150},
+        {"label": "周四", "value": 80},
+        {"label": "周五", "value": 70},
+        {"label": "周六", "value": 110},
+        {"label": "周日", "value": 130}
+      ]
+    }
+  ]
+}

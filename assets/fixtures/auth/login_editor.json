@@ -1,0 +1,5 @@
+{
+  "accessToken": "mock-editor-token",
+  "refreshToken": "mock-editor-refresh",
+  "expiresIn": 7200
+}

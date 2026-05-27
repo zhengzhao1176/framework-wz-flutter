@@ -1,0 +1,28 @@
+[
+  {"key":"dashboard","title":"Dashboard","path":"/dashboard","icon":"dashboard"},
+  {"key":"introduction","title":"介绍","path":"/introduction","icon":"intro"},
+  {"key":"components","title":"component组件","icon":"bookmark","children":[
+    {"key":"buttons","title":"Buttons按钮","path":"/components/buttons"},
+    {"key":"hoverbuttons","title":"悬停特效按钮","path":"/components/hoverbuttons"},
+    {"key":"alert","title":"Alert警告提示","path":"/components/alert"},
+    {"key":"card","title":"Card卡片","path":"/components/card"},
+    {"key":"datepicker","title":"DatePicker","path":"/components/datepicker"},
+    {"key":"form","title":"Form表单","path":"/components/form"},
+    {"key":"modal","title":"Modal对话框","path":"/components/modal"},
+    {"key":"select","title":"Select选择器","path":"/components/select"},
+    {"key":"spin","title":"Spin加载中","path":"/components/spin"},
+    {"key":"steps","title":"Steps步骤条","path":"/components/steps"},
+    {"key":"timeline","title":"Timeline时间轴","path":"/components/timeline"},
+    {"key":"transfer","title":"Transfer穿梭框","path":"/components/transfer"},
+    {"key":"timepicker","title":"Timepicker","path":"/components/timepicker"},
+    {"key":"upload","title":"Upload上传","path":"/components/upload"}
+  ]},
+  {"key":"charts","title":"echart图表","icon":"chart","children":[
+    {"key":"shopchart","title":"商场统计图表","path":"/charts/shopchart"},
+    {"key":"radarchart","title":"雷达图","path":"/charts/radarchart"},
+    {"key":"cakechart","title":"蛋糕销量图表","path":"/charts/cakechart"}
+  ]},
+  {"key":"table","title":"表格综合实例","path":"/table","icon":"table"},
+  {"key":"jsontree","title":"JSON视图","path":"/jsontree","icon":"json"},
+  {"key":"markdown","title":"Markdown","path":"/markdown","icon":"editor"}
+]

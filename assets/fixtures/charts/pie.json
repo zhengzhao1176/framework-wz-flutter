@@ -1,0 +1,14 @@
+{
+  "type": "pie",
+  "series": [
+    {
+      "name": "流量来源",
+      "points": [
+        {"label": "搜索", "value": 42},
+        {"label": "直接访问", "value": 28},
+        {"label": "推荐", "value": 18},
+        {"label": "社交", "value": 12}
+      ]
+    }
+  ]
+}
